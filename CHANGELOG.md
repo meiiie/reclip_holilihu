@@ -4,10 +4,21 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-05-08
+
 ### Added
 
 - Community health files for contributors, support, security, and issue triage.
+- Issue templates and pull request template.
 - CI smoke tests for the Flask API, CLI, and MCP server.
+- Dependabot configuration with grouped updates.
+- OpenSSF Scorecard workflow for scheduled security posture checks.
+- Architecture, release, localization, roadmap, and maintainer documentation.
+
+### Changed
+
+- Updated GitHub Actions versions.
+- Clarified Vietnamese-first project language status.
 
 ## [0.1.0] - 2026-05-08
 
@@ -21,5 +32,6 @@
 - Windows release workflow that builds `HoLiLiHu-ReClip-Setup.exe`.
 - MIT attribution notice for the original ReClip project.
 
-[Unreleased]: https://github.com/meiiie/reclip_holilihu/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/meiiie/reclip_holilihu/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/meiiie/reclip_holilihu/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/meiiie/reclip_holilihu/releases/tag/v0.1.0
