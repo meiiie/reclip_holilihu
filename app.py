@@ -1,171 +1,216 @@
+import json as json_mod
 import os
-import uuid
-import glob
-import json
-import subprocess
-import threading
-from flask import Flask, request, jsonify, send_file, render_template
+import subprocess as sp
+import sys
+from datetime import datetime
 
-app = Flask(__name__)
-DOWNLOAD_DIR = os.path.join(os.path.dirname(__file__), "downloads")
-os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+from flask import Flask, jsonify, render_template, request, send_file
 
-jobs = {}
+import history
+import settings as app_settings
+from downloader import COOKIES_FILE, compact_error, manager
 
 
-def run_download(job_id, url, format_choice, format_id):
-    job = jobs[job_id]
-    out_template = os.path.join(DOWNLOAD_DIR, f"{job_id}.%(ext)s")
-
-    cmd = ["yt-dlp", "--no-playlist", "-o", out_template]
-
-    if format_choice == "audio":
-        cmd += ["-x", "--audio-format", "mp3"]
-    elif format_id:
-        cmd += ["-f", f"{format_id}+bestaudio/best", "--merge-output-format", "mp4"]
-    else:
-        cmd += ["-f", "bestvideo+bestaudio/best", "--merge-output-format", "mp4"]
-
-    cmd.append(url)
-
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
-        if result.returncode != 0:
-            job["status"] = "error"
-            job["error"] = result.stderr.strip().split("\n")[-1]
-            return
-
-        files = glob.glob(os.path.join(DOWNLOAD_DIR, f"{job_id}.*"))
-        if not files:
-            job["status"] = "error"
-            job["error"] = "Download completed but no file was found"
-            return
-
-        if format_choice == "audio":
-            target = [f for f in files if f.endswith(".mp3")]
-            chosen = target[0] if target else files[0]
-        else:
-            target = [f for f in files if f.endswith(".mp4")]
-            chosen = target[0] if target else files[0]
-
-        for f in files:
-            if f != chosen:
-                try:
-                    os.remove(f)
-                except OSError:
-                    pass
-
-        job["status"] = "done"
-        job["file"] = chosen
-        ext = os.path.splitext(chosen)[1]
-        title = job.get("title", "").strip()
-        # Sanitize title for filename
-        if title:
-            safe_title = "".join(c for c in title if c not in r'\/:*?"<>|').strip()[:20].strip()
-            job["filename"] = f"{safe_title}{ext}" if safe_title else os.path.basename(chosen)
-        else:
-            job["filename"] = os.path.basename(chosen)
-    except subprocess.TimeoutExpired:
-        job["status"] = "error"
-        job["error"] = "Download timed out (5 min limit)"
-    except Exception as e:
-        job["status"] = "error"
-        job["error"] = str(e)
+def resource_path(relative_path):
+    """Resolve bundled resources when running from PyInstaller."""
+    if getattr(sys, 'frozen', False):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath(os.path.dirname(__file__)), relative_path)
 
 
-@app.route("/")
+app = Flask(
+    __name__,
+    template_folder=resource_path('templates'),
+    static_folder=resource_path('static'),
+)
+
+
+def error_response(error, status=400):
+    return jsonify({'error': compact_error(error)}), status
+
+
+@app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template('index.html')
 
 
-@app.route("/api/info", methods=["POST"])
+@app.route('/api/info', methods=['POST'])
 def get_info():
-    data = request.json
-    url = data.get("url", "").strip()
-    if not url:
-        return jsonify({"error": "No URL provided"}), 400
-
-    cmd = ["yt-dlp", "--no-playlist", "-j", url]
+    data = request.json or {}
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
-        if result.returncode != 0:
-            return jsonify({"error": result.stderr.strip().split("\n")[-1]}), 400
-
-        info = json.loads(result.stdout)
-
-        # Build quality options — keep best format per resolution
-        best_by_height = {}
-        for f in info.get("formats", []):
-            height = f.get("height")
-            if height and f.get("vcodec", "none") != "none":
-                tbr = f.get("tbr") or 0
-                if height not in best_by_height or tbr > (best_by_height[height].get("tbr") or 0):
-                    best_by_height[height] = f
-
-        formats = []
-        for height, f in best_by_height.items():
-            formats.append({
-                "id": f["format_id"],
-                "label": f"{height}p",
-                "height": height,
-            })
-        formats.sort(key=lambda x: x["height"], reverse=True)
-
-        return jsonify({
-            "title": info.get("title", ""),
-            "thumbnail": info.get("thumbnail", ""),
-            "duration": info.get("duration"),
-            "uploader": info.get("uploader", ""),
-            "formats": formats,
-        })
-    except subprocess.TimeoutExpired:
-        return jsonify({"error": "Timed out fetching video info"}), 400
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify(manager.get_info(data.get('url', '')))
+    except Exception as exc:
+        return error_response(exc)
 
 
-@app.route("/api/download", methods=["POST"])
+@app.route('/api/download', methods=['POST'])
 def start_download():
-    data = request.json
-    url = data.get("url", "").strip()
-    format_choice = data.get("format", "video")
-    format_id = data.get("format_id")
-    title = data.get("title", "")
-
-    if not url:
-        return jsonify({"error": "No URL provided"}), 400
-
-    job_id = uuid.uuid4().hex[:10]
-    jobs[job_id] = {"status": "downloading", "url": url, "title": title}
-
-    thread = threading.Thread(target=run_download, args=(job_id, url, format_choice, format_id))
-    thread.daemon = True
-    thread.start()
-
-    return jsonify({"job_id": job_id})
+    data = request.json or {}
+    try:
+        job = manager.start_download(
+            url=data.get('url', ''),
+            format_choice=data.get('format', 'video'),
+            format_id=data.get('format_id'),
+            title=data.get('title', ''),
+            uploader=data.get('uploader', ''),
+            duration=data.get('duration') or 0,
+            thumbnail=data.get('thumbnail', ''),
+            use_aac=data.get('use_aac'),
+        )
+        return jsonify({'job_id': job['job_id'], 'status': job['status']})
+    except Exception as exc:
+        return error_response(exc)
 
 
-@app.route("/api/status/<job_id>")
+@app.route('/api/status/<job_id>')
 def check_status(job_id):
-    job = jobs.get(job_id)
+    job = manager.get_job(job_id)
     if not job:
-        return jsonify({"error": "Job not found"}), 404
+        return jsonify({'error': 'Không tìm thấy tác vụ'}), 404
     return jsonify({
-        "status": job["status"],
-        "error": job.get("error"),
-        "filename": job.get("filename"),
+        'status': job.get('status'),
+        'error': job.get('error'),
+        'filename': job.get('filename'),
+        'file_path': job.get('file_path'),
+        'progress': job.get('progress', 0),
+        'speed': job.get('speed', ''),
+        'eta': job.get('eta', ''),
+        'created_at': job.get('created_at'),
+        'started_at': job.get('started_at'),
+        'completed_at': job.get('completed_at'),
     })
 
 
-@app.route("/api/file/<job_id>")
+@app.route('/api/file/<job_id>')
 def download_file(job_id):
-    job = jobs.get(job_id)
-    if not job or job["status"] != "done":
-        return jsonify({"error": "File not ready"}), 404
-    return send_file(job["file"], as_attachment=True, download_name=job["filename"])
+    job = manager.get_job(job_id)
+    if not job or job.get('status') != 'done':
+        return jsonify({'error': 'File chưa sẵn sàng'}), 404
+    return send_file(job['file_path'], as_attachment=True, download_name=job['filename'])
 
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8899))
-    host = os.environ.get("HOST", "127.0.0.1")
-    app.run(host=host, port=port)
+@app.route('/api/check')
+def check_deps():
+    manager.refresh_ffmpeg()
+    return jsonify(manager.runtime_state())
+
+
+@app.route('/api/jobs')
+def get_jobs():
+    return jsonify({'items': manager.list_jobs(), 'runtime': manager.runtime_state()})
+
+
+@app.route('/api/history')
+def get_history():
+    search = request.args.get('search', '')
+    status_filter = request.args.get('status', '')
+    try:
+        limit = max(1, min(100, int(request.args.get('limit', 20))))
+        offset = max(0, int(request.args.get('offset', 0)))
+    except ValueError:
+        return jsonify({'error': 'Tham số phân trang không hợp lệ'}), 400
+
+    items, total = history.get_history(
+        limit=limit,
+        offset=offset,
+        search=search,
+        status_filter=status_filter,
+    )
+    stats = history.get_stats()
+    return jsonify({'items': items, 'stats': stats, 'total': total, 'limit': limit, 'offset': offset})
+
+
+@app.route('/api/history/clear', methods=['POST'])
+def clear_history():
+    history.clear_history()
+    return jsonify({'ok': True})
+
+
+@app.route('/api/history/delete', methods=['POST'])
+def delete_history_item():
+    data = request.json or {}
+    item_id = data.get('id')
+    if item_id:
+        history.delete_item(item_id)
+    return jsonify({'ok': True})
+
+
+@app.route('/api/open-folder', methods=['POST'])
+def open_folder():
+    data = request.json or {}
+    file_path = data.get('file_path', '')
+    if file_path and os.path.isfile(file_path):
+        sp.Popen(['explorer', '/select,', os.path.normpath(file_path)])
+    elif file_path:
+        folder = os.path.dirname(file_path)
+        if os.path.isdir(folder):
+            sp.Popen(['explorer', os.path.normpath(folder)])
+    return jsonify({'ok': True})
+
+
+@app.route('/api/settings')
+def get_settings():
+    return jsonify(app_settings.load_settings())
+
+
+@app.route('/api/settings', methods=['POST'])
+def update_settings():
+    data = request.json or {}
+    current = app_settings.load_settings()
+    current.update(data)
+    app_settings.save_settings(current)
+    manager.reload_settings()
+    return jsonify({'ok': True, 'settings': app_settings.load_settings()})
+
+
+@app.route('/api/cookies', methods=['GET'])
+def get_cookies_status():
+    if os.path.isfile(COOKIES_FILE):
+        mtime = datetime.fromtimestamp(os.path.getmtime(COOKIES_FILE)).strftime('%d/%m/%Y %H:%M')
+        return jsonify({'has_cookies': True, 'message': f'Đã có cookies ({mtime})'})
+    return jsonify({'has_cookies': False, 'message': 'Chưa có cookies'})
+
+
+@app.route('/api/cookies', methods=['POST'])
+def upload_cookies():
+    data = request.json or {}
+    content = data.get('content', '')
+    if not content:
+        return jsonify({'ok': False, 'error': 'File rỗng'})
+
+    os.makedirs(os.path.dirname(COOKIES_FILE), exist_ok=True)
+
+    try:
+        parsed = json_mod.loads(content)
+        cookies = parsed.get('cookies', parsed) if isinstance(parsed, dict) else parsed
+        if isinstance(cookies, list) and cookies:
+            count = 0
+            with open(COOKIES_FILE, 'w', encoding='utf-8') as file:
+                file.write('# Netscape HTTP Cookie File\n')
+                for cookie in cookies:
+                    domain = cookie.get('domain', '')
+                    flag = 'TRUE' if domain.startswith('.') else 'FALSE'
+                    path = cookie.get('path', '/')
+                    secure = 'TRUE' if cookie.get('secure') else 'FALSE'
+                    expires = str(int(cookie.get('expirationDate', 0)))
+                    name = cookie.get('name', '')
+                    value = cookie.get('value', '')
+                    file.write(f'{domain}\t{flag}\t{path}\t{secure}\t{expires}\t{name}\t{value}\n')
+                    count += 1
+            return jsonify({'ok': True, 'message': f'Đã chuyển đổi và lưu {count} cookies!'})
+    except (json_mod.JSONDecodeError, TypeError, KeyError, ValueError):
+        pass
+
+    if '# ' in content or '\t' in content:
+        with open(COOKIES_FILE, 'w', encoding='utf-8') as file:
+            file.write(content)
+        lines = [line for line in content.strip().split('\n') if line and not line.startswith('#')]
+        return jsonify({'ok': True, 'message': f'Đã lưu {len(lines)} cookies!'})
+
+    return jsonify({'ok': False, 'error': 'Không nhận dạng được định dạng file (cần .json hoặc .txt)'})
+
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 8899))
+    host = os.environ.get('HOST', '127.0.0.1')
+    app.run(host=host, port=port, threaded=True)

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "holilihu-reclip": {
+      "command": "python",
+      "args": [
+        "./scripts/holilihu_reclip_mcp.py"
+      ],
+      "startup_timeout_sec": 20,
+      "tool_timeout_sec": 7200
+    }
+  }
+}

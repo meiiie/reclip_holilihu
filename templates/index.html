@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReClip — Free Media Downloader</title>
+  <title>HoLiLiHu ReClip — Tải video miễn phí</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -141,6 +141,52 @@
     .fetch-btn:active { transform: scale(0.98); }
     .fetch-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+    .options-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+      letter-spacing: 0.02em;
+    }
+    .toggle-label input[type="checkbox"] {
+      appearance: none;
+      width: 36px;
+      height: 20px;
+      background: var(--card-border);
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .toggle-label input[type="checkbox"]::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.2s;
+    }
+    .toggle-label input[type="checkbox"]:checked {
+      background: var(--accent);
+    }
+    .toggle-label input[type="checkbox"]:checked::after {
+      transform: translateX(16px);
+    }
+
     /* Cards */
     .cards { margin-top: 24px; }
 
@@ -266,9 +312,37 @@
       font-size: 0.68rem;
       color: var(--muted);
     }
+    .card-status.queued { color: var(--muted); }
     .card-status.downloading { color: var(--accent); }
     .card-status.done { color: var(--success); }
     .card-status.error { color: var(--error); }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: var(--card-border);
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    .progress-fill.done { background: var(--success); }
+
+    .dep-warning {
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: rgba(232, 93, 42, 0.08);
+      border: 1px solid rgba(232, 93, 42, 0.2);
+      font-size: 0.72rem;
+      color: var(--accent);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
 
     .q-chip {
       padding: 4px 10px;
@@ -363,6 +437,195 @@
       text-transform: uppercase;
       line-height: 1.8;
     }
+    .footer a { color: var(--muted); text-decoration: underline; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1.5px solid var(--card-border);
+      margin-bottom: 24px;
+    }
+    .tab {
+      padding: 10px 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.76rem;
+      border: none;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .tab.active { color: var(--fg); border-bottom-color: var(--accent); }
+    .tab:hover:not(.active) { color: var(--fg); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* History */
+    .history-stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .stat-box {
+      padding: 10px 16px;
+      border: 1.5px solid var(--card-border);
+      border-radius: 10px;
+      background: var(--card);
+      font-size: 0.72rem;
+      color: var(--muted);
+      flex: 1;
+      min-width: 100px;
+      text-align: center;
+    }
+    .stat-box .stat-num {
+      font-size: 1.4rem;
+      font-family: 'Instrument Serif', serif;
+      color: var(--fg);
+      display: block;
+    }
+    .history-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 14px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background: var(--card);
+      margin-bottom: 6px;
+      font-size: 0.72rem;
+    }
+    .history-item .hi-status {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .hi-status.completed { background: var(--success); }
+    .hi-status.error { background: var(--error); }
+    .history-item .hi-body { flex: 1; min-width: 0; }
+    .history-item .hi-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .hi-btn {
+      padding: 4px 10px;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      background: transparent;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .hi-btn:hover { border-color: var(--fg); color: var(--fg); }
+    .hi-btn.hi-del:hover { border-color: var(--error); color: var(--error); }
+    .history-item .hi-title {
+      font-weight: 500;
+      color: var(--fg);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .history-item .hi-meta { color: var(--muted); font-size: 0.65rem; margin-top: 2px; }
+    .history-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+    .history-actions input {
+      flex: 1;
+      padding: 8px 14px;
+      border: 1.5px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--card);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.76rem;
+      color: var(--fg);
+      outline: none;
+    }
+    .history-actions input:focus { border-color: var(--accent); }
+    .btn-sm {
+      padding: 8px 14px;
+      border: 1.5px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--card);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-sm:hover { border-color: var(--fg); color: var(--fg); }
+    .btn-sm.danger:hover { border-color: var(--error); color: var(--error); }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .pagination button {
+      padding: 6px 14px;
+      border: 1.5px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--card);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--fg);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pagination button:hover { border-color: var(--accent); color: var(--accent); }
+    .pagination button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* Settings */
+    .settings-group {
+      margin-bottom: 20px;
+    }
+    .settings-group label {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+    .settings-group input[type="text"],
+    .settings-group input[type="number"] {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--card);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--fg);
+      outline: none;
+    }
+    .settings-group input[type="text"]:focus,
+    .settings-group input[type="number"]:focus { border-color: var(--accent); }
+    .save-btn {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .save-btn:hover { background: var(--accent-hover); }
+    .saved-msg { font-size: 0.72rem; color: var(--success); margin-left: 12px; }
 
     /* Mobile */
     @media (max-width: 500px) {
@@ -383,33 +646,140 @@
 <body>
   <div class="page">
     <div class="brand">
-      <h1>Re<em>Clip</em></h1>
-      <p>Free media downloader</p>
+      <h1>HoLiLiHu Re<em>Clip</em></h1>
+      <p>Tải video & nhạc miễn phí</p>
     </div>
 
-    <textarea id="urls" placeholder="Paste one or more URLs..." rows="2"></textarea>
-    <p class="hint">Multiple links? Separate with spaces, commas, or newlines.</p>
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('download', this)">Tải xuống</button>
+      <button class="tab" onclick="switchTab('history', this)">Lịch sử</button>
+      <button class="tab" onclick="switchTab('settings', this)">Cài đặt</button>
+    </div>
+
+    <div id="tab-download" class="tab-content active">
+    <textarea id="urls" placeholder="Dán link video vào đây..." rows="2"></textarea>
+    <p class="hint">Nhiều link? Cách nhau bằng dấu cách, dấu phẩy, hoặc xuống dòng.</p>
 
     <div class="controls">
       <div class="pill-group">
         <button class="pill active" data-format="video" onclick="setFormat(this)">MP4</button>
         <button class="pill" data-format="audio" onclick="setFormat(this)">MP3</button>
       </div>
-      <button class="fetch-btn" id="goBtn" onclick="go()">Fetch</button>
+      <button class="fetch-btn" id="goBtn" onclick="go()">Tải</button>
     </div>
 
+    <div class="options-row">
+      <label class="toggle-label">
+        <input type="checkbox" id="aacToggle">
+        Chuyển âm thanh sang AAC (tương thích Windows tốt hơn)
+      </label>
+    </div>
+
+    <div id="depWarning"></div>
     <div id="cards" class="cards"></div>
+
+    </div><!-- end tab-download -->
+
+    <div id="tab-history" class="tab-content">
+      <div id="historyStats" class="history-stats"></div>
+      <div class="history-actions">
+        <input type="text" id="historySearch" placeholder="Tìm kiếm..." oninput="loadHistory(0)">
+        <button class="btn-sm danger" onclick="clearAllHistory()">Xóa tất cả</button>
+      </div>
+      <div id="historyList"></div>
+      <div id="historyPagination" class="pagination"></div>
+    </div>
+
+    <div id="tab-settings" class="tab-content">
+      <div class="settings-group">
+        <label>Thư mục lưu file tải xuống</label>
+        <input type="text" id="settingOutputPath">
+      </div>
+      <div class="settings-group">
+        <label class="toggle-label">
+          <input type="checkbox" id="settingAAC">
+          Mặc định chuyển âm thanh sang AAC
+        </label>
+      </div>
+      <div class="settings-group">
+        <label class="toggle-label">
+          <input type="checkbox" id="settingSubfolders" checked>
+          Tạo thư mục con theo ngày (Videos/, Audio/)
+        </label>
+      </div>
+      <div class="settings-group">
+        <label>Số video tải cùng lúc</label>
+        <input type="number" id="settingMaxConcurrent" min="1" max="8" step="1">
+      </div>
+      <div class="settings-group">
+        <label>Số mảnh tải song song trong mỗi video</label>
+        <input type="number" id="settingFragmentConcurrency" min="1" max="16" step="1">
+      </div>
+
+      <div class="settings-group" style="margin-top:24px;padding-top:20px;border-top:1px solid var(--card-border);">
+        <label style="font-weight:500;color:var(--fg);margin-bottom:10px;">Cookies YouTube (cho video bị chặn bot)</label>
+        <p style="font-size:0.68rem;color:var(--muted);margin-bottom:10px;line-height:1.6;">
+          Một số video YouTube yêu cầu đăng nhập. Để tải được, bạn cần xuất cookies từ trình duyệt:<br>
+          1. Cài extension <b>"Get cookies.txt LOCALLY"</b> trên Chrome/Edge<br>
+          2. Vào <b>youtube.com</b> (đã đăng nhập)<br>
+          3. Click icon extension → Export → lưu file <b>cookies.txt</b><br>
+          4. Chọn file đó ở đây:
+        </p>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="file" id="cookieFileInput" accept=".txt,.json" style="display:none" onchange="uploadCookies(this)">
+          <button class="btn-sm" onclick="document.getElementById('cookieFileInput').click()">Chọn file cookies (.txt hoặc .json)</button>
+          <span id="cookieStatus" style="font-size:0.68rem;color:var(--muted);"></span>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;margin-top:16px;">
+        <button class="save-btn" onclick="saveSettings()">Lưu cài đặt</button>
+        <span id="savedMsg" class="saved-msg" style="display:none;">Đã lưu!</span>
+      </div>
+    </div>
 
     <div class="footer">
       YouTube &middot; TikTok &middot; Instagram &middot; Twitter/X &middot; Reddit &middot; Facebook<br>
       Vimeo &middot; Twitch &middot; Dailymotion &middot; SoundCloud &middot; Loom &middot; Streamable<br>
-      Pinterest &middot; Tumblr &middot; Threads &middot; LinkedIn &middot; 1000+ more
+      Pinterest &middot; Tumblr &middot; Threads &middot; LinkedIn &middot; 1000+ nền tảng khác<br><br>
+      Dựa trên <a href="#" onclick="openExternal('https://github.com/averygan/reclip');return false;" style="color:var(--muted);text-decoration:underline;">ReClip</a> bởi averygan &middot; Giấy phép MIT
     </div>
   </div>
 
   <script>
     let currentFormat = 'video';
     let cardData = [];
+
+    // Mở link ngoài trên trình duyệt mặc định
+    function openExternal(url) {
+      if (window.pywebview && window.pywebview.api) {
+        window.pywebview.api.open_external(url);
+      } else {
+        window.open(url, '_blank');
+      }
+    }
+
+    // Kiểm tra ffmpeg + load cài đặt khi khởi động
+    (async function init() {
+      try {
+        const [depsRes, settingsRes] = await Promise.all([
+          fetch('/api/check'),
+          fetch('/api/settings'),
+        ]);
+        const deps = await depsRes.json();
+        const settings = await settingsRes.json();
+
+        if (!deps.ffmpeg) {
+          document.getElementById('depWarning').innerHTML =
+            '<div class="dep-warning">⚠ Chưa tìm thấy <b>ffmpeg</b>. Đặt file <b>ffmpeg.exe</b> cạnh file .exe để ghép video+audio và chuyển đổi định dạng.</div>';
+        }
+
+        // Đồng bộ AAC toggle từ cài đặt
+        if (settings.use_aac) {
+          document.getElementById('aacToggle').checked = true;
+        }
+      } catch {}
+    })();
 
     function setFormat(btn) {
       document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
@@ -435,15 +805,16 @@
     }
 
     function friendlyError(err) {
-      if (err.includes('Unsupported URL')) return 'This URL is not supported';
-      if (err.includes('Video unavailable')) return 'Video is unavailable or private';
-      if (err.includes('Private video')) return 'This video is private';
-      if (err.includes('HTTP Error 403')) return 'Access denied by the platform';
-      if (err.includes('HTTP Error 404')) return 'Video not found';
-      if (err.includes('copyright')) return 'Video blocked due to copyright';
-      if (err.includes('geo')) return 'Video not available in your region';
-      if (err.includes('timed out') || err.includes('Timed out')) return 'Request timed out — try again';
-      if (err.includes('network') || err.includes('Network')) return 'Network error — check your connection';
+      if (err.includes('Sign in') || err.includes('bot')) return 'YouTube yêu cầu xác minh. Vào Cài đặt → nhập cookies từ trình duyệt';
+      if (err.includes('Unsupported URL')) return 'Link này không được hỗ trợ';
+      if (err.includes('Video unavailable')) return 'Video không khả dụng hoặc bị ẩn';
+      if (err.includes('Private video')) return 'Video riêng tư';
+      if (err.includes('HTTP Error 403')) return 'Bị từ chối truy cập';
+      if (err.includes('HTTP Error 404')) return 'Không tìm thấy video';
+      if (err.includes('copyright')) return 'Video bị chặn do bản quyền';
+      if (err.includes('geo')) return 'Video không khả dụng tại khu vực của bạn';
+      if (err.includes('timed out') || err.includes('Timed out')) return 'Hết thời gian chờ — thử lại';
+      if (err.includes('network') || err.includes('Network')) return 'Lỗi mạng — kiểm tra kết nối';
       return err.length > 80 ? err.slice(0, 80) + '...' : err;
     }
 
@@ -458,7 +829,7 @@
       const btn = document.getElementById('goBtn');
       const container = document.getElementById('cards');
       btn.disabled = true;
-      btn.textContent = 'Loading...';
+      btn.textContent = 'Đang tải...';
       container.innerHTML = '';
       cardData = [];
 
@@ -500,7 +871,7 @@
       }
 
       btn.disabled = false;
-      btn.textContent = 'Fetch';
+      btn.textContent = 'Tải';
     }
 
     function renderCard(idx) {
@@ -536,7 +907,7 @@
             </div>
           </div>
           <div class="card-body">
-            <div class="card-title" style="color:var(--error)">Could not fetch video</div>
+            <div class="card-title" style="color:var(--error)">Không thể lấy thông tin video</div>
             <div class="card-error-msg">${esc(friendlyError(c.error || ''))}</div>
             <div class="card-error-url">${esc(c.url)}</div>
           </div>
@@ -565,24 +936,34 @@
       }
 
       let actionHtml = '';
+      let progressHtml = '';
       if (c.status === 'ready') {
-        actionHtml = `<button class="card-dl-btn" onclick="dlCard(${idx})">Download</button>${qualityChips}`;
+        actionHtml = `<button class="card-dl-btn" onclick="dlCard(${idx})">Tải xuống</button>${qualityChips}`;
+      } else if (c.status === 'queued') {
+        actionHtml = `<span class="card-status queued"><span class="spin"></span> Đang chờ lượt...</span>`;
+        progressHtml = `<div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>`;
       } else if (c.status === 'downloading') {
-        actionHtml = `<span class="card-status downloading"><span class="spin"></span> Downloading...</span>`;
+        const pct = c.progress || 0;
+        const speedText = c.speed ? ` · ${c.speed}` : '';
+        const etaText = c.eta ? ` · còn ${c.eta}` : '';
+        actionHtml = `<span class="card-status downloading"><span class="spin"></span> ${pct}%${speedText}${etaText}</span>`;
+        progressHtml = `<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
       } else if (c.status === 'done') {
-        actionHtml = `<button class="card-dl-btn done" onclick="saveCard(${idx})">Save</button>
+        actionHtml = `<button class="card-dl-btn done" onclick="saveCard(${idx})">Lưu</button>
           <span class="card-status done">${esc(c.filename || '')}</span>`;
+        progressHtml = `<div class="progress-bar"><div class="progress-fill done" style="width:100%"></div></div>`;
       } else if (c.status === 'error') {
-        actionHtml = `<button class="card-dl-btn" onclick="dlCard(${idx})">Retry</button>
-          <span class="card-status error">${esc(friendlyError(c.error || 'Download failed'))}</span>`;
+        actionHtml = `<button class="card-dl-btn" onclick="dlCard(${idx})">Thử lại</button>
+          <span class="card-status error">${esc(friendlyError(c.error || 'Tải thất bại'))}</span>`;
       }
 
       el.innerHTML = `
         <div class="card-thumb">${thumbHtml}</div>
         <div class="card-body">
-          <div class="card-title">${esc(c.title || 'Untitled')}</div>
+          <div class="card-title">${esc(c.title || 'Không có tiêu đề')}</div>
           <div class="card-meta">${esc(c.uploader)}${c.duration ? ' · ' + fmtDur(c.duration) : ''}</div>
           <div class="card-actions">${actionHtml}</div>
+          ${progressHtml}
         </div>
       `;
     }
@@ -594,7 +975,7 @@
       const bar = document.createElement('div');
       bar.id = 'dl-all-bar';
       bar.className = 'dl-all-bar';
-      bar.innerHTML = `<button class="dl-all-btn" onclick="dlAll()">Download All</button>`;
+      bar.innerHTML = `<button class="dl-all-btn" onclick="dlAll()">Tải tất cả</button>`;
       document.getElementById('cards').appendChild(bar);
     }
 
@@ -605,7 +986,7 @@
 
     async function dlCard(idx) {
       const c = cardData[idx];
-      c.status = 'downloading';
+      c.status = 'queued';
       c.error = null;
       renderCard(idx);
 
@@ -618,6 +999,10 @@
             format: currentFormat,
             format_id: c.selectedFormatId,
             title: c.title || '',
+            uploader: c.uploader || '',
+            duration: c.duration || 0,
+            thumbnail: c.thumbnail || '',
+            use_aac: document.getElementById('aacToggle').checked,
           }),
         });
         const data = await res.json();
@@ -628,6 +1013,8 @@
           return;
         }
         c.jobId = data.job_id;
+        c.status = data.status || 'queued';
+        renderCard(idx);
         pollCard(idx);
       } catch (err) {
         c.status = 'error';
@@ -646,6 +1033,7 @@
             clearInterval(iv);
             c.status = 'done';
             c.filename = data.filename;
+            c.progress = 100;
             renderCard(idx);
             saveCard(idx);
           } else if (data.status === 'error') {
@@ -653,14 +1041,20 @@
             c.status = 'error';
             c.error = data.error;
             renderCard(idx);
+          } else {
+            c.status = data.status || 'downloading';
+            c.progress = data.progress || 0;
+            c.speed = data.speed || '';
+            c.eta = data.eta || '';
+            renderCard(idx);
           }
         } catch {
           clearInterval(iv);
           c.status = 'error';
-          c.error = 'Lost connection to server';
+          c.error = 'Mất kết nối đến máy chủ';
           renderCard(idx);
         }
-      }, 1000);
+      }, 800);
     }
 
     function saveCard(idx) {
@@ -674,7 +1068,7 @@
 
     async function dlAll() {
       const btn = document.querySelector('.dl-all-btn');
-      if (btn) { btn.disabled = true; btn.textContent = 'Downloading...'; }
+      if (btn) { btn.disabled = true; btn.textContent = 'Đang tải...'; }
 
       for (let i = 0; i < cardData.length; i++) {
         if (cardData[i].status === 'ready') {
@@ -682,7 +1076,173 @@
         }
       }
 
-      if (btn) { btn.disabled = false; btn.textContent = 'Download All'; }
+      if (btn) { btn.disabled = false; btn.textContent = 'Tải tất cả'; }
+    }
+
+    // ── Tabs ──────────────────────────────────────
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      btn.classList.add('active');
+      if (name === 'history') loadHistory();
+      if (name === 'settings') loadSettings();
+    }
+
+    // ── History ───────────────────────────────────
+    let historyPage = 0;
+    const HISTORY_PER_PAGE = 20;
+
+    async function loadHistory(page) {
+      if (page !== undefined) historyPage = page;
+      const search = document.getElementById('historySearch').value;
+      const offset = historyPage * HISTORY_PER_PAGE;
+      try {
+        const res = await fetch(`/api/history?search=${encodeURIComponent(search)}&limit=${HISTORY_PER_PAGE}&offset=${offset}`);
+        const data = await res.json();
+
+        const statsEl = document.getElementById('historyStats');
+        const s = data.stats;
+        statsEl.innerHTML = `
+          <div class="stat-box"><span class="stat-num">${s.total}</span>Tổng cộng</div>
+          <div class="stat-box"><span class="stat-num">${s.completed}</span>Thành công</div>
+          <div class="stat-box"><span class="stat-num">${s.errors}</span>Lỗi</div>
+          <div class="stat-box"><span class="stat-num">${s.total_size_mb} MB</span>Dung lượng</div>
+        `;
+
+        const listEl = document.getElementById('historyList');
+        if (!data.items.length && historyPage === 0) {
+          listEl.innerHTML = '<p style="color:var(--muted);font-size:0.78rem;text-align:center;padding:20px;">Chưa có lịch sử tải.</p>';
+          document.getElementById('historyPagination').innerHTML = '';
+          return;
+        }
+        listEl.innerHTML = data.items.map(item => {
+          const date = new Date(item.downloaded_at).toLocaleString('vi-VN');
+          const size = item.file_size ? (item.file_size / 1024 / 1024).toFixed(1) + ' MB' : '';
+          const type = item.download_type === 'audio' ? 'MP3' : 'MP4';
+          const openBtn = item.status === 'completed' && item.file_path
+            ? `<button class="hi-btn" onclick="openFolder('${esc(item.file_path.replace(/\\/g, '\\\\'))}')">Mở thư mục</button>`
+            : '';
+          return `
+            <div class="history-item">
+              <div class="hi-status ${item.status}"></div>
+              <div class="hi-body">
+                <div class="hi-title">${esc(item.title || item.url)}</div>
+                <div class="hi-meta">${esc(item.uploader || '')} · ${type} · ${size} · ${date}</div>
+              </div>
+              <div class="hi-actions">
+                ${openBtn}
+                <button class="hi-btn hi-del" onclick="deleteHistoryItem(${item.id})">Xóa</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Phân trang
+        const total = data.total;
+        const totalPages = Math.ceil(total / HISTORY_PER_PAGE);
+        const pagEl = document.getElementById('historyPagination');
+        if (totalPages <= 1) {
+          pagEl.innerHTML = '';
+          return;
+        }
+        const prevDisabled = historyPage === 0 ? 'disabled' : '';
+        const nextDisabled = historyPage >= totalPages - 1 ? 'disabled' : '';
+        pagEl.innerHTML = `
+          <button ${prevDisabled} onclick="loadHistory(0)">&#171;</button>
+          <button ${prevDisabled} onclick="loadHistory(${historyPage - 1})">&#8249; Trước</button>
+          <span>Trang ${historyPage + 1} / ${totalPages}</span>
+          <button ${nextDisabled} onclick="loadHistory(${historyPage + 1})">Sau &#8250;</button>
+          <button ${nextDisabled} onclick="loadHistory(${totalPages - 1})">&#187;</button>
+        `;
+      } catch {}
+    }
+
+    async function openFolder(filePath) {
+      await fetch('/api/open-folder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ file_path: filePath }),
+      });
+    }
+
+    async function deleteHistoryItem(id) {
+      await fetch('/api/history/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      loadHistory(historyPage);
+    }
+
+    async function clearAllHistory() {
+      if (!confirm('Xóa toàn bộ lịch sử tải?')) return;
+      await fetch('/api/history/clear', { method: 'POST' });
+      loadHistory(0);
+    }
+
+    // ── Settings ──────────────────────────────────
+    async function loadSettings() {
+      try {
+        const [settingsRes, cookieRes] = await Promise.all([
+          fetch('/api/settings'),
+          fetch('/api/cookies'),
+        ]);
+        const data = await settingsRes.json();
+        document.getElementById('settingOutputPath').value = data.output_path || '';
+        document.getElementById('settingAAC').checked = data.use_aac || false;
+        document.getElementById('settingSubfolders').checked = data.create_subfolders !== false;
+        document.getElementById('settingMaxConcurrent').value = data.max_concurrent_downloads || 3;
+        document.getElementById('settingFragmentConcurrency').value = data.fragment_concurrency || 4;
+
+        const cookieData = await cookieRes.json();
+        const el = document.getElementById('cookieStatus');
+        if (cookieData.has_cookies) {
+          el.style.color = 'var(--success)';
+          el.textContent = cookieData.message;
+        } else {
+          el.style.color = 'var(--muted)';
+          el.textContent = 'Chưa có cookies';
+        }
+      } catch {}
+    }
+
+    async function uploadCookies(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const text = await file.text();
+      const res = await fetch('/api/cookies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: text }),
+      });
+      const data = await res.json();
+      const el = document.getElementById('cookieStatus');
+      if (data.ok) {
+        el.style.color = 'var(--success)';
+        el.textContent = data.message;
+      } else {
+        el.style.color = 'var(--error)';
+        el.textContent = data.error;
+      }
+    }
+
+    async function saveSettings() {
+      const data = {
+        output_path: document.getElementById('settingOutputPath').value,
+        use_aac: document.getElementById('settingAAC').checked,
+        create_subfolders: document.getElementById('settingSubfolders').checked,
+        max_concurrent_downloads: Number(document.getElementById('settingMaxConcurrent').value) || 3,
+        fragment_concurrency: Number(document.getElementById('settingFragmentConcurrency').value) || 4,
+      };
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const msg = document.getElementById('savedMsg');
+      msg.style.display = 'inline';
+      setTimeout(() => msg.style.display = 'none', 2000);
     }
   </script>
 </body>

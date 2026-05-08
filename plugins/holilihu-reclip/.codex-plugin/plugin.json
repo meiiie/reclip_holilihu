@@ -1,0 +1,34 @@
+{
+  "name": "holilihu-reclip",
+  "version": "0.1.0",
+  "description": "Codex plugin and MCP tools for downloading videos through HoLiLiHu ReClip.",
+  "homepage": "https://github.com/meiiie/reclip_holilihu",
+  "repository": "https://github.com/meiiie/reclip_holilihu",
+  "license": "MIT",
+  "keywords": [
+    "video",
+    "audio",
+    "download",
+    "yt-dlp",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "HoLiLiHu ReClip",
+    "shortDescription": "Download video and audio with ReClip MCP tools.",
+    "longDescription": "Provides Codex with MCP tools for fetching media metadata, queueing bounded concurrent downloads, checking status, and returning local file paths.",
+    "developerName": "HoLiLiHu",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use ReClip to download this video.",
+      "Fetch info for these video URLs.",
+      "Download these links as MP3 files."
+    ],
+    "brandColor": "#E85D2A"
+  }
+}

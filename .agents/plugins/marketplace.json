@@ -1,0 +1,20 @@
+{
+  "name": "holilihu-local",
+  "interface": {
+    "displayName": "HoLiLiHu Local Plugins"
+  },
+  "plugins": [
+    {
+      "name": "holilihu-reclip",
+      "source": {
+        "source": "local",
+        "path": "./plugins/holilihu-reclip"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

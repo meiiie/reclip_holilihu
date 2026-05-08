@@ -1,0 +1,12 @@
+HoLiLiHu ReClip
+
+This project is developed from the original ReClip project:
+
+  https://github.com/averygan/reclip
+
+The original project is licensed under the MIT License. The MIT license text is
+preserved in LICENSE and must be included in copies or substantial portions of
+this software.
+
+HoLiLiHu ReClip adds a bounded concurrent download manager, desktop packaging
+support, Codex MCP tools, and Codex/plugin distribution helpers.
