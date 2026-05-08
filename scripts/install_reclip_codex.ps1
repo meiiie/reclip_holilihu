@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$RepoUrl,
 
-    [string]$InstallDir = "$env:LOCALAPPDATA\HoLiLiHu-ReClip-src",
+    [string]$InstallDir = "$env:LOCALAPPDATA\reclip-holilihu-mcp",
 
     [string]$Branch = "main",
 
@@ -78,7 +78,7 @@ if (!$SkipCodexConfig) {
     $serverPath = Join-Path $InstallDir "mcp_server.py"
 
     $block = @"
-[mcp_servers.holilihu-reclip]
+[mcp_servers.reclip-holilihu-mcp]
 command = $(ConvertTo-TomlString $venvPython)
 args = [$(ConvertTo-TomlString $serverPath)]
 cwd = $(ConvertTo-TomlString $InstallDir)
@@ -89,8 +89,10 @@ tool_timeout_sec = 7200
     $content = ""
     if (Test-Path $configPath) {
         $content = Get-Content -Raw -Path $configPath
-        $pattern = "(?ms)^\[mcp_servers\.holilihu-reclip\]\r?\n.*?(?=^\[|\z)"
-        $content = [regex]::Replace($content, $pattern, "").TrimEnd()
+        foreach ($serverName in @("reclip-holilihu-mcp", "holilihu-reclip")) {
+            $pattern = "(?ms)^\[mcp_servers\.$([regex]::Escape($serverName))\]\r?\n.*?(?=^\[|\z)"
+            $content = [regex]::Replace($content, $pattern, "").TrimEnd()
+        }
     }
 
     if ($content.Length -gt 0) {

@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "holilihu-reclip",
+      "name": "reclip-holilihu-mcp",
       "source": {
         "source": "local",
-        "path": "./plugins/holilihu-reclip"
+        "path": "./plugins/reclip-holilihu-mcp"
       },
       "policy": {
         "installation": "AVAILABLE",

@@ -1,5 +1,6 @@
-blank_issues_enabled: false
+﻿blank_issues_enabled: false
 contact_links:
   - name: Security report
-    url: https://github.com/meiiie/reclip_holilihu/security/advisories/new
-    about: Báo cáo bảo mật riêng tư nếu GitHub Security Advisories được bật.
+    url: https://github.com/meiiie/reclip-holilihu-mcp/security/advisories/new
+    about: BÃ¡o cÃ¡o báº£o máº­t riÃªng tÆ° náº¿u GitHub Security Advisories Ä‘Æ°á»£c báº­t.
+

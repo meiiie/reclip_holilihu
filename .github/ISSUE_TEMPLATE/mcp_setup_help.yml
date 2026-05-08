@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Trước khi gửi, hãy chạy `reclip-holilihu doctor` và dán kết quả đã xóa thông tin nhạy cảm.
+        Trước khi gửi, hãy chạy `reclip-holilihu-mcp doctor` và dán kết quả đã xóa thông tin nhạy cảm.
   - type: textarea
     id: doctor
     attributes:

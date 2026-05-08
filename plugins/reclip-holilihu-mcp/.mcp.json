@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "holilihu-reclip": {
+    "reclip-holilihu-mcp": {
       "command": "python",
       "args": [
         "./scripts/holilihu_reclip_mcp.py"

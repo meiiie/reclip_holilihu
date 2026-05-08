@@ -3,8 +3,8 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "holilihu-reclip"
-version = "0.1.1"
+name = "reclip-holilihu-mcp"
+version = "0.1.2"
 description = "HoLiLiHu ReClip video downloader with Codex MCP tools."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -45,12 +45,13 @@ dev = [
 
 [project.scripts]
 reclip-holilihu = "reclip_holilihu_cli:main"
+reclip-holilihu-mcp = "reclip_holilihu_cli:main"
 holilihu-reclip = "reclip_holilihu_cli:main"
 
 [project.urls]
-Homepage = "https://github.com/meiiie/reclip_holilihu"
-Repository = "https://github.com/meiiie/reclip_holilihu"
-Issues = "https://github.com/meiiie/reclip_holilihu/issues"
+Homepage = "https://github.com/meiiie/reclip-holilihu-mcp"
+Repository = "https://github.com/meiiie/reclip-holilihu-mcp"
+Issues = "https://github.com/meiiie/reclip-holilihu-mcp/issues"
 
 [tool.setuptools]
 py-modules = [

@@ -7,7 +7,7 @@ HoLiLiHu ReClip gồm ba lớp chính: web/desktop UI, download manager, và MCP
 ```mermaid
 flowchart TD
   User["User / Codex"] --> Web["Flask web UI"]
-  User --> CLI["reclip-holilihu CLI"]
+  User --> CLI["reclip-holilihu-mcp CLI"]
   User --> MCP["MCP stdio server"]
   Web --> Manager["DownloadManager"]
   CLI --> MCP
@@ -54,7 +54,7 @@ Các route chính:
 - `get_runtime_status`
 - `list_recent_downloads`
 
-MCP chạy local qua stdio. Codex khởi động process theo config `mcp_servers.holilihu-reclip`.
+MCP chạy local qua stdio. Codex khởi động process theo config `mcp_servers.reclip-holilihu-mcp`.
 
 ## CLI
 

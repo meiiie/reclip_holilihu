@@ -20,7 +20,7 @@ Trong giai đoạn `0.x`, API có thể thay đổi nhanh hơn, nhưng release n
    .venv\Scripts\python.exe -m py_compile app.py downloader.py mcp_server.py reclip_holilihu_cli.py history.py settings.py desktop.py
    .venv\Scripts\python.exe tests\smoke_app.py
    .venv\Scripts\python.exe tests\smoke_mcp.py
-   .venv\Scripts\reclip-holilihu.exe doctor
+   .venv\Scripts\reclip-holilihu-mcp.exe doctor
    ```
 
 4. Commit:

@@ -6,7 +6,7 @@ import history
 from downloader import manager
 
 
-mcp = FastMCP("holilihu-reclip")
+mcp = FastMCP("reclip-holilihu-mcp")
 
 
 def _metadata_for(url, enabled=True):

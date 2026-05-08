@@ -1,12 +1,12 @@
-# HoLiLiHu ReClip
+﻿# HoLiLiHu ReClip
 
-[![CI](https://github.com/meiiie/reclip_holilihu/actions/workflows/ci.yml/badge.svg)](https://github.com/meiiie/reclip_holilihu/actions/workflows/ci.yml)
-[![Release](https://github.com/meiiie/reclip_holilihu/actions/workflows/release-windows.yml/badge.svg)](https://github.com/meiiie/reclip_holilihu/actions/workflows/release-windows.yml)
-[![GitHub release](https://img.shields.io/github/v/release/meiiie/reclip_holilihu?display_name=tag)](https://github.com/meiiie/reclip_holilihu/releases)
+[![CI](https://github.com/meiiie/reclip-holilihu-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/meiiie/reclip-holilihu-mcp/actions/workflows/ci.yml)
+[![Release](https://github.com/meiiie/reclip-holilihu-mcp/actions/workflows/release-windows.yml/badge.svg)](https://github.com/meiiie/reclip-holilihu-mcp/actions/workflows/release-windows.yml)
+[![GitHub release](https://img.shields.io/github/v/release/meiiie/reclip-holilihu-mcp?display_name=tag)](https://github.com/meiiie/reclip-holilihu-mcp/releases)
 ![Python](https://img.shields.io/badge/python-3.10+-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-HoLiLiHu ReClip is a ReClip-based video/audio downloader with a clean web UI, bounded concurrent downloads, and MCP tools for Codex. Paste links from YouTube, TikTok, Instagram, Twitter/X, and 1000+ other sites — download as MP4 or MP3, or let Codex queue downloads for you.
+HoLiLiHu ReClip is a ReClip-based video/audio downloader with a clean web UI, bounded concurrent downloads, and MCP tools for Codex. Paste links from YouTube, TikTok, Instagram, Twitter/X, and 1000+ other sites â€” download as MP4 or MP3, or let Codex queue downloads for you.
 
 This project is developed from the original [ReClip](https://github.com/averygan/reclip) project and keeps the MIT license.
 
@@ -23,7 +23,7 @@ https://github.com/user-attachments/assets/419d3e50-c933-444b-8cab-a9724986ba05
 - Quality/resolution picker
 - Bulk downloads with a bounded queue for stable concurrent downloads
 - Automatic URL deduplication
-- Clean, responsive UI — no frameworks, no build step
+- Clean, responsive UI â€” no frameworks, no build step
 - Optional Codex MCP/plugin integration for agent-driven downloads
 
 ## Project Status
@@ -43,8 +43,8 @@ Useful project docs:
 
 ```bash
 brew install yt-dlp ffmpeg    # or apt install ffmpeg && pip install yt-dlp
-git clone https://github.com/meiiie/reclip_holilihu.git
-cd reclip_holilihu
+git clone https://github.com/meiiie/reclip-holilihu-mcp.git
+cd reclip-holilihu-mcp
 ./reclip.sh
 ```
 
@@ -86,33 +86,33 @@ python mcp_server.py
 Recommended CLI setup after installing from GitHub:
 
 ```bash
-pipx install git+https://github.com/meiiie/reclip_holilihu.git
-reclip-holilihu setup-mcp codex
-reclip-holilihu doctor
+pipx install git+https://github.com/meiiie/reclip-holilihu-mcp.git
+reclip-holilihu-mcp setup-mcp codex
+reclip-holilihu-mcp doctor
 ```
 
 From a source checkout:
 
 ```bash
-python reclip_holilihu_cli.py setup-mcp codex --source /absolute/path/to/reclip-holilihu
+python reclip_holilihu_cli.py setup-mcp codex --source /absolute/path/to/reclip-holilihu-mcp
 python reclip_holilihu_cli.py doctor
 ```
 
 Direct Codex MCP setup is also supported:
 
 ```bash
-codex mcp add holilihu-reclip -- python /absolute/path/to/reclip-holilihu/mcp_server.py
+codex mcp add reclip-holilihu-mcp -- python /absolute/path/to/reclip-holilihu-mcp/mcp_server.py
 ```
 
-The repo also includes a local Codex plugin scaffold at `plugins/holilihu-reclip` and a marketplace file at `.agents/plugins/marketplace.json`. Treat the MCP server and CLI as the stable distribution path; use the repo-local plugin when your Codex build supports local plugin marketplaces.
+The repo also includes a local Codex plugin scaffold at `plugins/reclip-holilihu-mcp` and a marketplace file at `.agents/plugins/marketplace.json`. Treat the MCP server and CLI as the stable distribution path; use the repo-local plugin when your Codex build supports local plugin marketplaces.
 
 For teammate handoff steps, see `docs/TEAMMATE_SETUP.md`. For publishing this fork as its own GitHub repository, see `docs/GITHUB_PUBLISH.md`.
 
 After pushing this repo to GitHub, teammates can also install and configure Codex from PowerShell:
 
 ```powershell
-iwr -UseBasicParsing -OutFile install_reclip_codex.ps1 https://raw.githubusercontent.com/meiiie/reclip_holilihu/main/scripts/install_reclip_codex.ps1
-.\install_reclip_codex.ps1 -RepoUrl https://github.com/meiiie/reclip_holilihu.git
+iwr -UseBasicParsing -OutFile install_reclip_codex.ps1 https://raw.githubusercontent.com/meiiie/reclip-holilihu-mcp/main/scripts/install_reclip_codex.ps1
+.\install_reclip_codex.ps1 -RepoUrl https://github.com/meiiie/reclip-holilihu-mcp.git
 ```
 
 Available MCP tools:
@@ -146,3 +146,4 @@ This tool is intended for personal use only. Please respect copyright laws and t
 HoLiLiHu ReClip is distributed under the [MIT License](LICENSE).
 
 This project is developed from the original [ReClip](https://github.com/averygan/reclip) project. The original MIT license notice is preserved; see [NOTICE](NOTICE) for attribution.
+

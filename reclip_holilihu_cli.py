@@ -7,7 +7,8 @@ import sys
 from pathlib import Path
 
 
-SERVER_NAME = 'holilihu-reclip'
+SERVER_NAME = 'reclip-holilihu-mcp'
+LEGACY_SERVER_NAMES = ['holilihu-reclip']
 
 
 def toml_string(value):
@@ -38,8 +39,10 @@ def build_codex_block(command, args, cwd=None):
 
 
 def remove_existing_block(content):
-    pattern = rf'(?ms)^\[mcp_servers\.{re.escape(SERVER_NAME)}\]\r?\n.*?(?=^\[|\Z)'
-    return re.sub(pattern, '', content).rstrip()
+    for server_name in [SERVER_NAME, *LEGACY_SERVER_NAMES]:
+        pattern = rf'(?ms)^\[mcp_servers\.{re.escape(server_name)}\]\r?\n.*?(?=^\[|\Z)'
+        content = re.sub(pattern, '', content)
+    return content.rstrip()
 
 
 def write_codex_config(block, dry_run=False):
@@ -133,7 +136,7 @@ def serve(args):
     cwd = Path(args.source).expanduser().resolve() if args.source else Path.cwd()
     app_path = cwd / 'app.py'
     if not app_path.is_file():
-        raise SystemExit(f'Cannot find app.py in {cwd}. Pass --source /path/to/reclip_holilihu.')
+        raise SystemExit(f'Cannot find app.py in {cwd}. Pass --source /path/to/reclip-holilihu-mcp.')
     subprocess.run([sys.executable, str(app_path)], check=True, env=env, cwd=str(cwd))
 
 
@@ -145,7 +148,7 @@ def run_mcp(_args):
 
 def build_parser():
     parser = argparse.ArgumentParser(
-        prog='reclip-holilihu',
+        prog='reclip-holilihu-mcp',
         description='Install, configure, and run HoLiLiHu ReClip MCP tools.',
     )
     subparsers = parser.add_subparsers(dest='command', required=True)

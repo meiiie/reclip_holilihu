@@ -1,4 +1,4 @@
-# Publish HoLiLiHu ReClip to GitHub
+﻿# Publish HoLiLiHu ReClip to GitHub
 
 This project started from the original ReClip repository. To publish HoLiLiHu ReClip as its own GitHub project, keep the original repository as `upstream` and use your HoLiLiHu repository as `origin`.
 
@@ -7,7 +7,7 @@ This project started from the original ReClip repository. To publish HoLiLiHu Re
 Create a new empty repository on GitHub:
 
 ```text
-meiiie/reclip_holilihu
+meiiie/reclip-holilihu-mcp
 ```
 
 Recommended settings:
@@ -25,15 +25,15 @@ Current local `origin` points to the original ReClip repo. Rename it to `upstrea
 
 ```bash
 git remote rename origin upstream
-git remote add origin https://github.com/meiiie/reclip_holilihu.git
+git remote add origin https://github.com/meiiie/reclip-holilihu-mcp.git
 git remote -v
 ```
 
 Expected shape:
 
 ```text
-origin    https://github.com/meiiie/reclip_holilihu.git (fetch)
-origin    https://github.com/meiiie/reclip_holilihu.git (push)
+origin    https://github.com/meiiie/reclip-holilihu-mcp.git (fetch)
+origin    https://github.com/meiiie/reclip-holilihu-mcp.git (push)
 upstream  https://github.com/averygan/reclip.git (fetch)
 upstream  https://github.com/averygan/reclip.git (push)
 ```
@@ -98,16 +98,16 @@ The GitHub Actions workflow builds the Windows setup artifact on tag push.
 Codex/MCP users:
 
 ```powershell
-pipx install git+https://github.com/meiiie/reclip_holilihu.git
-reclip-holilihu setup-mcp codex
-reclip-holilihu doctor
+pipx install git+https://github.com/meiiie/reclip-holilihu-mcp.git
+reclip-holilihu-mcp setup-mcp codex
+reclip-holilihu-mcp doctor
 ```
 
 Source checkout users:
 
 ```powershell
-iwr -UseBasicParsing -OutFile install_reclip_codex.ps1 https://raw.githubusercontent.com/meiiie/reclip_holilihu/main/scripts/install_reclip_codex.ps1
-.\install_reclip_codex.ps1 -RepoUrl https://github.com/meiiie/reclip_holilihu.git
+iwr -UseBasicParsing -OutFile install_reclip_codex.ps1 https://raw.githubusercontent.com/meiiie/reclip-holilihu-mcp/main/scripts/install_reclip_codex.ps1
+.\install_reclip_codex.ps1 -RepoUrl https://github.com/meiiie/reclip-holilihu-mcp.git
 ```
 
 Desktop users:
@@ -126,3 +126,4 @@ git log --oneline main..upstream/main
 ```
 
 Only merge upstream intentionally after checking whether the changes still fit HoLiLiHu ReClip.
+

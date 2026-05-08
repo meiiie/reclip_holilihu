@@ -47,5 +47,5 @@ jobs:
       - name: Smoke test CLI
         shell: powershell
         run: |
-          reclip-holilihu print-mcp-config codex --source .
-          reclip-holilihu doctor
+          reclip-holilihu-mcp print-mcp-config codex --source .
+          reclip-holilihu-mcp doctor

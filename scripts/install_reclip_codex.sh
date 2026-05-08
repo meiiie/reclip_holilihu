@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REPO_URL=""
-INSTALL_DIR="${HOME}/.local/share/holilihu-reclip-src"
+INSTALL_DIR="${HOME}/.local/share/reclip-holilihu-mcp"
 BRANCH="main"
 SKIP_CODEX_CONFIG="0"
 
@@ -32,7 +32,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$REPO_URL" ]]; then
-  echo "Usage: $0 --repo-url https://github.com/ORG/reclip.git [--install-dir PATH] [--branch main]" >&2
+  echo "Usage: $0 --repo-url https://github.com/ORG/reclip-holilihu-mcp.git [--install-dir PATH] [--branch main]" >&2
   exit 1
 fi
 
@@ -87,7 +87,9 @@ import re
 import sys
 src, dst = sys.argv[1], sys.argv[2]
 text = open(src, encoding="utf-8").read()
-text = re.sub(r"(?ms)^\[mcp_servers\.holilihu-reclip\]\r?\n.*?(?=^\[|\Z)", "", text).rstrip()
+for server_name in ("reclip-holilihu-mcp", "holilihu-reclip"):
+    text = re.sub(rf"(?ms)^\[mcp_servers\.{re.escape(server_name)}\]\r?\n.*?(?=^\[|\Z)", "", text)
+text = text.rstrip()
 open(dst, "w", encoding="utf-8").write(text)
 PY
   else
@@ -99,7 +101,7 @@ PY
       cat "$TMP_PATH"
       printf '\n\n'
     fi
-    printf '[mcp_servers.holilihu-reclip]\n'
+    printf '[mcp_servers.reclip-holilihu-mcp]\n'
     printf 'command = %s\n' "$(toml_string "$VENV_PYTHON")"
     printf 'args = [%s]\n' "$(toml_string "$SERVER_PATH")"
     printf 'cwd = %s\n' "$(toml_string "$INSTALL_DIR")"

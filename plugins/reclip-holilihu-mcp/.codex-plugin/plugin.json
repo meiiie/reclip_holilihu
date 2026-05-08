@@ -1,9 +1,9 @@
 {
-  "name": "holilihu-reclip",
+  "name": "reclip-holilihu-mcp",
   "version": "0.1.0",
   "description": "Codex plugin and MCP tools for downloading videos through HoLiLiHu ReClip.",
-  "homepage": "https://github.com/meiiie/reclip_holilihu",
-  "repository": "https://github.com/meiiie/reclip_holilihu",
+  "homepage": "https://github.com/meiiie/reclip-holilihu-mcp",
+  "repository": "https://github.com/meiiie/reclip-holilihu-mcp",
   "license": "MIT",
   "keywords": [
     "video",
