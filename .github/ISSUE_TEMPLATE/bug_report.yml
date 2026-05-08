@@ -1,0 +1,64 @@
+name: Bug report
+description: Báo lỗi có thể tái hiện trong HoLiLiHu ReClip.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cảm ơn bạn đã báo lỗi. Dự án hiện ưu tiên tiếng Việt.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Tóm tắt lỗi
+      description: Mô tả ngắn gọn điều gì xảy ra.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Các bước tái hiện
+      placeholder: |
+        1. Mở app...
+        2. Dán link...
+        3. Bấm...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Kết quả mong đợi
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Kết quả thực tế
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Khu vực bị ảnh hưởng
+      options:
+        - Web UI
+        - Desktop app
+        - Download manager
+        - MCP/Codex
+        - CLI
+        - Installer
+        - Docs
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Hệ điều hành
+      placeholder: Windows 11, macOS, Ubuntu...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log hoặc ảnh chụp
+      description: Không dán cookies, token, hoặc thông tin riêng tư.

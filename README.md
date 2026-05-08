@@ -1,11 +1,16 @@
 # HoLiLiHu ReClip
 
+[![CI](https://github.com/meiiie/reclip_holilihu/actions/workflows/ci.yml/badge.svg)](https://github.com/meiiie/reclip_holilihu/actions/workflows/ci.yml)
+[![Release](https://github.com/meiiie/reclip_holilihu/actions/workflows/release-windows.yml/badge.svg)](https://github.com/meiiie/reclip_holilihu/actions/workflows/release-windows.yml)
+[![GitHub release](https://img.shields.io/github/v/release/meiiie/reclip_holilihu?display_name=tag)](https://github.com/meiiie/reclip_holilihu/releases)
+![Python](https://img.shields.io/badge/python-3.10+-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 HoLiLiHu ReClip is a ReClip-based video/audio downloader with a clean web UI, bounded concurrent downloads, and MCP tools for Codex. Paste links from YouTube, TikTok, Instagram, Twitter/X, and 1000+ other sites — download as MP4 or MP3, or let Codex queue downloads for you.
 
 This project is developed from the original [ReClip](https://github.com/averygan/reclip) project and keeps the MIT license.
 
-![Python](https://img.shields.io/badge/python-3.10+-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+> Language status: the product UI and primary support flow are currently Vietnamese-first. Full English localization is planned later; see [Localization](docs/LOCALIZATION.md).
 
 https://github.com/user-attachments/assets/419d3e50-c933-444b-8cab-a9724986ba05
 
@@ -20,6 +25,19 @@ https://github.com/user-attachments/assets/419d3e50-c933-444b-8cab-a9724986ba05
 - Automatic URL deduplication
 - Clean, responsive UI — no frameworks, no build step
 - Optional Codex MCP/plugin integration for agent-driven downloads
+
+## Project Status
+
+HoLiLiHu ReClip is currently `0.x` alpha software. The app is usable, but the CLI/MCP interface may still evolve before `1.0.0`.
+
+Useful project docs:
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Teammate setup](docs/TEAMMATE_SETUP.md)
+- [Release process](docs/RELEASE.md)
+- [Roadmap](ROADMAP.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
 
 ## Quick Start
 

@@ -1,0 +1,32 @@
+name: Feature request
+description: Đề xuất tính năng hoặc cải tiến.
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Vấn đề cần giải quyết
+      description: Tính năng này giúp gì cho người dùng?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Đề xuất
+      description: Mô tả giải pháp bạn muốn.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Phương án khác đã nghĩ tới
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Xác nhận phạm vi
+      options:
+        - label: Tính năng này không nhằm né DRM, paywall, bản quyền, hoặc điều khoản nền tảng.
+          required: true
+        - label: Tôi hiểu UI hiện ưu tiên tiếng Việt.
+          required: true

@@ -1,0 +1,36 @@
+name: MCP setup help
+description: Cần hỗ trợ cài đặt hoặc cấu hình MCP/Codex.
+title: "[MCP]: "
+labels: ["mcp", "support", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Trước khi gửi, hãy chạy `reclip-holilihu doctor` và dán kết quả đã xóa thông tin nhạy cảm.
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Kết quả doctor
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: codex
+    attributes:
+      label: Phiên bản/loại Codex đang dùng
+      placeholder: Codex CLI, Codex desktop, IDE extension...
+    validations:
+      required: true
+  - type: input
+    id: install-method
+    attributes:
+      label: Cách cài
+      placeholder: pipx, source script, clone thủ công...
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Vấn đề gặp phải
+    validations:
+      required: true

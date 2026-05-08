@@ -130,7 +130,11 @@ def serve(args):
         env['PORT'] = str(args.port)
     if args.host:
         env['HOST'] = args.host
-    subprocess.run([sys.executable, '-m', 'app'], check=True, env=env)
+    cwd = Path(args.source).expanduser().resolve() if args.source else Path.cwd()
+    app_path = cwd / 'app.py'
+    if not app_path.is_file():
+        raise SystemExit(f'Cannot find app.py in {cwd}. Pass --source /path/to/reclip_holilihu.')
+    subprocess.run([sys.executable, str(app_path)], check=True, env=env, cwd=str(cwd))
 
 
 def run_mcp(_args):
@@ -163,6 +167,7 @@ def build_parser():
     doctor_cmd.set_defaults(func=doctor)
 
     serve_cmd = subparsers.add_parser('serve', help='Run the web app from a source checkout.')
+    serve_cmd.add_argument('--source', help='Path to a source checkout containing app.py.')
     serve_cmd.add_argument('--host')
     serve_cmd.add_argument('--port', type=int)
     serve_cmd.set_defaults(func=serve)
